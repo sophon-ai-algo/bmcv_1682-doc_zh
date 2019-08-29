@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>BMCV User Manual &mdash; SophonInference  documentation</title>
+  <title>BMCV用户手册 &mdash; SophonInference  documentation</title>
   
 
   
@@ -31,7 +31,7 @@
 
   
     <link rel="top" title="SophonInference  documentation" href="#"/>
-        <link rel="next" title="BMCV Glossary" href="quickstart/glossary.html"/> 
+        <link rel="next" title="缩略语" href="quickstart/glossary.html"/> 
 
   
   <script src="_static/js/modernizr.min.js"></script>
@@ -77,19 +77,19 @@
             
             
                 <ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/glossary.html">BMCV Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/version.html">Version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart/glossary.html">缩略语</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart/version.html">版本信息</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart/features.html">版本特性</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction/intr.html">BMCV Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/intr.html">BMCV简介</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="api/ffmpeg.html">FFMPEG Interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/bmcv.html">BMCV Lib Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/ffmpeg.html">FFMPEG接口说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/bmcv.html">BMCV接口说明</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="demo/demo.html">BMCV Sample Code Explain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo/demo.html">BMCV示例代码说明</a></li>
 </ul>
 
             
@@ -120,7 +120,7 @@
   <ul class="wy-breadcrumbs">
     <li><a href="#">Docs</a> &raquo;</li>
       
-    <li>BMCV User Manual</li>
+    <li>BMCV用户手册</li>
       <li class="wy-breadcrumbs-aside">
         
           
@@ -134,12 +134,11 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="bmcv-user-manual">
-<h1>BMCV User Manual<a class="headerlink" href="#bmcv-user-manual" title="Permalink to this headline">¶</a></h1>
-<p><strong>Tips</strong></p>
-<p>Before using <strong>BMCV</strong>, make sure you have installed the Bitmain Sophon-SC3 TPU and the software development kit BMNNSDK;
-And read the &#8220;BMLIB User Manual&#8221; and &#8220;BMCV User Manual.&#8221;</p>
-<p><strong>CopyRight</strong></p>
+  <div class="section" id="bmcv">
+<h1>BMCV用户手册<a class="headerlink" href="#bmcv" title="Permalink to this headline">¶</a></h1>
+<p><strong>提示</strong></p>
+<p>使用 <strong>BMCV</strong> 之前，请首先确认已经安装 Bitmain Sophon-SC3 TPU及软件开发工具包BMNNSDK，并提前阅读《BMLIB用户手册》和《BMCV用户手册》。</p>
+<p><strong>版权信息</strong></p>
 <p>CopyRight © 2019 Beijing Bitmain Technology Co., Ltd.
 No part of this document may be reproduced or transmitted in any form or by any means without prior written permission from Bitmain.
 For more information, please visit www.sophon.ai.</p>
@@ -161,7 +160,7 @@ For more information, please visit www.sophon.ai.</p>
 <tr class="row-even"><td>2019.08.27</td>
 <td>Yu HOU</td>
 <td>1.1.4</td>
-<td>First Version</td>
+<td>初版</td>
 </tr>
 <tr class="row-odd"><td>&nbsp;</td>
 <td>&nbsp;</td>
@@ -170,31 +169,31 @@ For more information, please visit www.sophon.ai.</p>
 </tr>
 </tbody>
 </table>
-<div class="section" id="bmcv-quickstart">
-<h2>BMCV Quickstart<a class="headerlink" href="#bmcv-quickstart" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id1">
+<h2>BMCV快速开始<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/glossary.html">BMCV Glossary</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/version.html">Version</a></li>
-<li class="toctree-l1"><a class="reference internal" href="quickstart/features.html">Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart/glossary.html">缩略语</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart/version.html">版本信息</a></li>
+<li class="toctree-l1"><a class="reference internal" href="quickstart/features.html">版本特性</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="bmcv-introduction">
-<h2>BMCV Introduction<a class="headerlink" href="#bmcv-introduction" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id2">
+<h2>BMCV简介<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction/intr.html">BMCV Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="introduction/intr.html">BMCV简介</a></li>
 </ul>
 </div>
 </div>
-<div class="section" id="bmcv-api">
-<h2>BMCV Api<a class="headerlink" href="#bmcv-api" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id3">
+<h2>BMCV应用程序接口<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="api/ffmpeg.html">FFMPEG Interfaces</a></li>
-<li class="toctree-l1"><a class="reference internal" href="api/bmcv.html">BMCV Lib Interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/bmcv.html#common-structure">Common Structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/ffmpeg.html">FFMPEG接口说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api/bmcv.html">BMCV接口说明</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/bmcv.html#id1">公共结构图体说明</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/bmcv.html#bmcv-img-yuv2bgr">bmcv_img_yuv2bgr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/bmcv.html#bmcv-img-crop">bmcv_img_crop</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/bmcv.html#bmcv-img-scale">bmcv_img_scale</a></li>
@@ -205,11 +204,11 @@ For more information, please visit www.sophon.ai.</p>
 </ul>
 </div>
 </div>
-<div class="section" id="bmcv-examples">
-<h2>BMCV Examples<a class="headerlink" href="#bmcv-examples" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id4">
+<h2>BMCV示例分析<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="demo/demo.html">BMCV Sample Code Explain</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demo/demo.html">BMCV示例代码说明</a></li>
 </ul>
 </div>
 </div>
@@ -222,7 +221,7 @@ For more information, please visit www.sophon.ai.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="quickstart/glossary.html" class="btn btn-neutral float-right" title="BMCV Glossary" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="quickstart/glossary.html" class="btn btn-neutral float-right" title="缩略语" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
     </div>
