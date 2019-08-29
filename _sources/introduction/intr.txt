@@ -1,0 +1,28 @@
+BMCV简介
+=================================
+
+BMCVSDK（BITMAIN Computer Vision SDK）是比特大陆基于自主研发的AI芯片，所定制的视频加速工具包
+涵盖了定制版本的FFMPEG和用户开发接口以及基于NPU的图像处理加速API，用于高效处理视频数据，提升基于神经网络视频应用的图像处理速度。 
+
+.. image:: ./structure1.png                                
+    :width: 400px 
+    :align: center
+
+BMCVSDK由驱动，用户态SDK以及FFMPEG定制版开源软件组成，典型场景下的框架关系如下：
+
+.. image:: ./structure2.png                                
+    :width: 400px 
+    :align: center
+
+应用程序运行于主机CPU上，链接BMDNN和BMCV以及FFMPEG动态库，运行时通过PCIE驱动访问BM1682。
+
+    1.	来自文件或者网络的视频流通过FFMPEG传输到VPU进行解码，解码结果存放于PCIE板卡上的DDR内存内。
+	
+    2.	视频解码结果作为BMCV的输入进行图像处理，结果存放于PCIE板卡的DDR内。
+	
+    3.	经过BMNETC或者BMNETT等编译器编译的神经网络文件上下文经过BMRUNTIME和BMLIB通过驱动加载到PCIE板卡的DDR内存中，
+	并将BMCV处理过的数据作为NPU的输入，进行网络计算。
+	
+    4.	计算结果通过PCIE读取回应用程序进行结果展示或者上报。
+
+从以上典型的应用场景可以看到，BMCV库和FFMPEG提供了对视频的流水线式处理，以源视频流的形式传输到BM1682 PCIE板卡上进行解码后，每帧图像数据将留存于PCIE板卡的内存中，在后续图像处理和神经网络计算中复用，达到零拷贝的效果，在计算机/服务器安装多块板卡的高密度计算场景中可以充分利用板卡的硬件资源，大大减少PCIE总线上的数据吞吐量。

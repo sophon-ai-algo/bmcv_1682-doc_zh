@@ -1,0 +1,40 @@
+FFMPEG接口说明
+=================================
+
+定制版本FFMPEG包含于发布包内，基于开源版本FFMPEG4.1开发,主要修改在于对BM1682 VPU硬件的使用。
+
+    基本的视频解码函数的接口没有变化。
+
+    创建解码上下文的时候增加了属性的设置，用于指明使用的PCIE板卡的编号，与驱动中的设备名编号对应：
+
+    .. image:: ./ffmpeg1.png                                
+       :width: 400px 
+       :align: center
+
+    可以在打开解码器之前设置此参数：
+	
+    .. image:: ./ffmpeg2.png                                
+       :width: 400px 
+       :align: center
+
+    增加取消数据回拷的参数。
+	
+    .. image:: ./ffmpeg3.png                                
+       :width: 400px 
+       :align: center
+
+    如果解码结果直接作为神经网络计算输入，可以在解码时候打开此参数，
+    解码结果不再拷回CPU，减少PCIE上带宽占用：
+
+    .. image:: ./ffmpeg4.png                                
+       :width: 400px 
+       :align: center
+
+    VPU解码出帧图像默认为NV12格式。
+
+    扩展解码出帧图像的数据结构，其中data字段扩大为8，后四个对应解码数据的颜色分量的物理地址，
+    此地址为PCIE板卡内DDR的内部编址，不能直接作为CPU地址使用，可以作为后续NPU计算的输入地址：
+
+    .. image:: ./ffmpeg5.png                                
+       :width: 400px 
+       :align: center

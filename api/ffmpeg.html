@@ -1,0 +1,228 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>FFMPEG接口说明 &mdash; SophonInference  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SophonInference  documentation" href="../index.html"/>
+        <link rel="next" title="BMCV接口说明" href="bmcv.html"/>
+        <link rel="prev" title="BMCV简介" href="../introduction/intr.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SophonInference
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/glossary.html">缩略语</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/version.html">版本信息</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/features.html">版本特性</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../introduction/intr.html">BMCV简介</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">FFMPEG接口说明</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bmcv.html">BMCV接口说明</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo/demo.html">BMCV示例代码说明</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">SophonInference</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>FFMPEG接口说明</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/api/ffmpeg.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ffmpeg">
+<h1>FFMPEG接口说明<a class="headerlink" href="#ffmpeg" title="Permalink to this headline">¶</a></h1>
+<p>定制版本FFMPEG包含于发布包内，基于开源版本FFMPEG4.1开发,主要修改在于对BM1682 VPU硬件的使用。</p>
+<blockquote>
+<div><p>基本的视频解码函数的接口没有变化。</p>
+<p>创建解码上下文的时候增加了属性的设置，用于指明使用的PCIE板卡的编号，与驱动中的设备名编号对应：</p>
+<a class="reference internal image-reference" href="../_images/ffmpeg1.png"><img alt="../_images/ffmpeg1.png" class="align-center" src="../_images/ffmpeg1.png" style="width: 400px;" /></a>
+<p>可以在打开解码器之前设置此参数：</p>
+<a class="reference internal image-reference" href="../_images/ffmpeg2.png"><img alt="../_images/ffmpeg2.png" class="align-center" src="../_images/ffmpeg2.png" style="width: 400px;" /></a>
+<p>增加取消数据回拷的参数。</p>
+<a class="reference internal image-reference" href="../_images/ffmpeg3.png"><img alt="../_images/ffmpeg3.png" class="align-center" src="../_images/ffmpeg3.png" style="width: 400px;" /></a>
+<p>如果解码结果直接作为神经网络计算输入，可以在解码时候打开此参数，
+解码结果不再拷回CPU，减少PCIE上带宽占用：</p>
+<a class="reference internal image-reference" href="../_images/ffmpeg4.png"><img alt="../_images/ffmpeg4.png" class="align-center" src="../_images/ffmpeg4.png" style="width: 400px;" /></a>
+<p>VPU解码出帧图像默认为NV12格式。</p>
+<p>扩展解码出帧图像的数据结构，其中data字段扩大为8，后四个对应解码数据的颜色分量的物理地址，
+此地址为PCIE板卡内DDR的内部编址，不能直接作为CPU地址使用，可以作为后续NPU计算的输入地址：</p>
+<a class="reference internal image-reference" href="../_images/ffmpeg5.png"><img alt="../_images/ffmpeg5.png" class="align-center" src="../_images/ffmpeg5.png" style="width: 400px;" /></a>
+</div></blockquote>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="bmcv.html" class="btn btn-neutral float-right" title="BMCV接口说明" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../introduction/intr.html" class="btn btn-neutral" title="BMCV简介" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sophon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

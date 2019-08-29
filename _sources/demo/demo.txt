@@ -1,0 +1,47 @@
+BMCV示例代码说明
+=========================
+
+本节我们仍然基于简单的对视频图像进行神经网络计算的典型应用场景下进行说明。
+
+应用中需要打开一个BMDNN的context，其中是经过BMNETC或者BMNETT等编译工具编译后的网络，
+其中pcie_board_id指定在哪块PCIE板上进行神经网络计算：
+
+.. image:: ./demo1.png                                
+    :width: 400px 
+    :align: center
+
+可以从其中得到指向context的handle，作为后续神经网络计算和视频解码加速的句柄：
+
+.. image:: ./demo2.png                                
+    :width: 400px 
+    :align: center
+
+然后可以声明使用到的神经网络，备后续对每帧图像进行计算：
+
+.. image:: ./demo3.png                                
+    :width: 400px 
+    :align: center
+
+启动FFMPEG对视频源进行解码，常规操作创建解码上下文后打开解码器之前设置使用的PCIE板卡：
+
+.. image:: ./demo4.png                                
+    :width: 400px 
+    :align: center
+
+此处可以设置pcie_no_copyback属性使解码结果不再读回CPU，节省PCIE上带宽。
+
+.. code-block:: c
+
+    Av_dict_set_int(&opts, “pcie_no_copyback”, 1, 0x0);
+
+启动解码，得到每帧数据后可以将颜色分量构建为BMLIB中的设备内存描述结构：
+
+.. image:: ./demo5.png                                
+    :width: 400px 
+    :align: center
+
+构建出来的内存描述结构可以作为图像处理增强接口的输入直接在PCIE板上无拷贝使用：
+
+.. image:: ./demo6.png                                
+    :width: 400px 
+    :align: center

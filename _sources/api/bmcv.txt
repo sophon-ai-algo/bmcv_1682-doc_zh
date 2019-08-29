@@ -1,0 +1,246 @@
+BMCV接口说明
+=================================
+
+BMCV库提供了部分基于NPU的图像处理接口，用于利用NPU强大的并行计算能力提高图像处理速度。
+
+公共结构图体说明
+-------------------------
+
+BMCV库对常用的图像相关的数据结构进行了封装，主要定义了image结构：
+
+    .. code-block:: c 
+
+        #define MAX_BMCV_IMAGE_CHANNEL 4
+
+        typedef enum bmcv_data_format_{
+            DATA_TYPE_FLOAT = 0,  // data type is 32 bit float
+            DATA_TYPE_BYTE = 4  // data type is 8 bit
+        }bmcv_data_format;
+
+
+        typedef enum bmcv_color_space_{
+            COLOR_YUV,  // color space is yuv
+            COLOR_YCbCr, // color space is YCbCr
+            COLOR_RGB  // color space is rgb
+        }bmcv_color_space;
+
+
+        typedef enum bmcv_image_format_{
+            YUV420P,  // data is in YUV420 packed format
+            NV12,  // data is in NV12 format
+            NV21,  // data is in NV21 format
+            RGB,  // data is in RGB planar format
+            BGR,  // data is in BGR planar format
+            RGB_PACKED, // data is in RGB packed format
+            BGR_PACKED, // data is in BGR packed format
+            BGR4N  // data is in BGR 4N mode, for future use
+        }bmcv_image_format;
+
+
+        typedef struct bmcv_image_t{
+            bmcv_color_space color_space;  // color space of the image
+            bmcv_data_format data_format;  // data format of the image
+            bmcv_image_format image_format;  // image format of the image
+            int              image_width;  // image width in pixel
+            int              image_height;  // image height in pixel
+            bm_device_mem_t  data[MAX_BMCV_IMAGE_CHANNEL]; // address of image data, may contain Y and UV channels in NV12 and YUV420P format; and R, G, B in RGB/BGR format, usually set the start address is enough
+            int              stride[MAX_BMCV_IMAGE_CHANNEL]; // stride of the image data
+        }bmcv_image;
+
+
+bmcv_img_yuv2bgr
+-------------------------
+
+此函数用于将NV12格式的图像数据转换为BGR格式的数据。
+
+    .. code-block:: c
+
+	bm_status_t bm_img_yuv2bgr(
+            bm_handle_t      handle,    //input
+            bmcv_image       input,     //output
+            bmcv_image       output);
+
+参数说明
+
+    ==============   ==================
+    **参数**          **说明**
+    ==============   ==================
+    handle           bmcv初始化获取的handle
+    input            输入的图像描述结构, 当前只支持NV12格式的输入图像，颜色空间支持YUV和YCbCr
+    ouput            输出的图像的描述结构，输出支持BGR planar/packed或者RGB planar/packed格式摆放。输出可选float类型或者byte类型
+    ==============   ==================
+
+bmcv_img_crop
+--------------------------
+
+此接口用于从bgr图像中剪切一部分形成新的图像。
+
+    .. code-block:: c
+	
+	bm_status_t bmcv_img_crop(
+            bm_handle_t      handle,
+            bmcv_image       input,
+            int              input_c,
+            int              top,
+            int              left,
+            bmcv_image       output);
+	
+参数说明
+
+    ==============    ====================================
+    **参数**           **说明**
+    ==============    ====================================
+    handle             bmcv初始化获取的handle
+    input              输入图像，只支持BGR planar或者RGB planar格式，输入输出的BGR或者RGB顺序一致不做交换。输入输出可以选择数据类型为float或者byte
+    input_c            输入数据颜色数，可以为1或者3，相应输出颜色数也会是1或者3
+    top                剪切开始点纵坐标，图片左上角为原点，单位为像素
+    left               剪切开始点横坐标，图片左上角为原点，单位为像素
+    ouput              输出的图像的描述结构
+    ==============    ====================================
+	
+
+bmcv_img_scale
+--------------------------
+
+此接口用于对图像进行缩放，并支持从原图中抠图缩放, 以及对输出图像进行归一化操作.
+
+    .. code-block:: c
+	
+	bm_status_t bmcv_img_scale(
+            bm_handle_t handle,
+            bmcv_image input,
+            int n, int do_crop, int top, int left, int height, int width,
+            unsigned char stretch, unsigned char padding_b, unsigned char padding_g, unsigned char padding_r,
+            int pixel_weight_bias,
+            float weight_b, float bias_b,
+            float weight_g, float bias_g,
+            float weight_r, float bias_r,
+            bmcv_image output);
+		
+参数说明
+
+    +-----------------+-----------------------------------------+
+    |**参数**         |**说明**                                 |
+    +=================+=========================================+
+    |handle           |bmcv初始化获取的handle                   |
+    +-----------------+-----------------------------------------+
+    |input            |输入图像数据地址, 只支持BGR planar或者   |
+    |                 |RGB planar格式数据，支持float或者byte    |
+    |                 |类型数据                                 |
+    +-----------------+-----------------------------------------+
+    |n                |处理图像的数量，目前只支持1              |
+    +-----------------+-----------------------------------------+
+    |do_crop          |是否进行抠图缩放。                       |
+    |                 |                                         |
+    |                 |  0：不抠图，下面四个参数无用。          |
+    |                 |                                         |
+    |                 |  1：抠图，下面四个参数用于确定抠图的尺寸|
+    +-----------------+-----------------------------------------+
+    |top              |抠图开始点纵坐标，图片左上角为原点，     |
+    |                 |单位为像素                               |
+    +-----------------+-----------------------------------------+
+    |left             |抠图开始点横坐标，图片左上角为原点，     |
+    |                 |单位为像素                               |
+    +-----------------+-----------------------------------------+
+    |height           |抠图高度，单位为像素                     |
+    +-----------------+-----------------------------------------+
+    |width            |抠图宽度，单位为像素                     |
+    +-----------------+-----------------------------------------+
+    |stretch          |缩放模式。                               |
+    |                 |                                         |
+    |                 |  0：fit模式，等比例缩放，按照下面的     |
+    |                 |  padding参数填充颜色                    |
+    |                 |                                         |
+    |                 |  1：拉伸模式，填满目标大小，下面的      |
+    |                 |  padding参数无用                        |
+    +-----------------+-----------------------------------------+
+    |padding_b        |fit模式下蓝色填充色值，为0-255之byte类型 |
+    |                 |，如果输出类型为byte或float但未指定归一化|
+    |                 |计算，则此值为填充颜色分量，如果输出为   |
+    |                 |float类型且需要归一化，则此分量也相应进  |
+    |                 |行归一化计算。                           |
+    +-----------------+-----------------------------------------+
+    |padding_g        |fit模式下绿色填充色值，为0-255之byte类型 |
+    |                 |，如果输出类型为byte或float但未指定归一化|
+    |                 |计算，则此值为填充颜色分量，如果输出为   |
+    |                 |float类型且需要归一化，则此分量也相应进行|
+    |                 |归一化计算。                             |
+    +-----------------+-----------------------------------------+
+    |padding_r        |fit模式下红色填充色值，为0-255之byte类型 |
+    |                 |，如果输出类型为byte或float但未指定归一化|
+    |                 |计算，则此值为填充颜色分量，如果输出为   |
+    |                 |float类型且需要归一化，则此分量也相应进  |
+    |                 |行归一化计算。                           |
+    +-----------------+-----------------------------------------+
+    |pixel_weight_bias|是否对输出图像进行归一化计算。           |
+    |                 |                                         |
+    |                 |    0：不做归一化计算，下面weight和bias  |
+    |                 |    参数无用                             |
+    |                 |                                         |
+    |                 |    1：进行归一化计算                    |
+    +-----------------+-----------------------------------------+
+    |weight_b         |b通道的系数                              |
+    +-----------------+-----------------------------------------+
+    |bias_b           |b通道偏移量                              |
+    +-----------------+-----------------------------------------+
+    |weight_g         |g通道的系数                              |
+    +-----------------+-----------------------------------------+
+    |bias_g           |g通道的偏移量                            |
+    +-----------------+-----------------------------------------+
+    |weight_r         |r通道的系数                              |
+    +-----------------+-----------------------------------------+
+    |bias_r           |r通道的偏移量                            |
+    +-----------------+-----------------------------------------+
+    |ouput            |输出的图像的描述结构，支持BGR planar或者 |
+    |                 |RGB planar格式，但是必须与输入相同。     |
+    +-----------------+-----------------------------------------+
+
+
+bmcv_img_transpose
+--------------------------
+
+此接口用于对bgr格式图像的转置，将图像按照矩阵转置的方式转置。
+
+    .. code-block:: c
+
+	bm_status_t bmcv_img_transpose(
+        bm_handle_t     handle,
+        bmcv_image	    input,
+        bmcv_image	    output);
+
+参数说明
+
+    ===============    =====================
+     **参数**           **说明**
+    ===============    =====================
+     handle             bmcv初始化获取的handle
+     input              输入图像，支持BGR planar或者RGB planar类型的float或byte类型
+     ouput              输出图像，支持BGR planar或者RGB planar类型的float或byte类型，BGR摆放顺序与输入相同
+    ===============    =====================
+
+	
+bmcv_img_bgrsplit
+--------------------------
+
+此接口用于对bgr数据的从interleave排列重排为plannar排列。
+
+    .. code-block:: c
+	
+	bm_status_t bmcv_img_bgrsplit(
+            bm_handle_t     handle,
+            bmcv_image	    input,
+            bmcv_image	    output);
+
+参数说明
+	
+    +--------------+-----------------------------------------+
+    | **参数**     |**说明**                                 |
+    +==============+=========================================+
+    |handle        |bmcv初始化获取的handle                   |
+    +--------------+-----------------------------------------+
+    |input         |输入待处理的图像数据，bgr数据，          |
+    |              |packed排列方式                           |
+    +--------------+-----------------------------------------+
+    |ouput         |输出待处理的图像数据，bgr数据，          |
+    |              |plannar排列方式                          |
+    +--------------+-----------------------------------------+
