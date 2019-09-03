@@ -1,0 +1,303 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>C++ Samples Using SAIL &mdash; SophonInference  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SophonInference  documentation" href="../index.html"/>
+        <link rel="next" title="Python Samples (Algokit)" href="python.html"/>
+        <link rel="prev" title="C++ Samples Using BMNNSDK" href="cpp.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SophonInference
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/abstract.html">图解 Sophon Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/install.html">Sophon Inference 编译</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp.html">C++ Samples Using BMNNSDK</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">C++ Samples Using SAIL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">图像分类</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">目标检测</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">人脸检测</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python Samples (Algokit)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module/sail.html">SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/autosplit.html">AutoSplit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/autorunner.html">AutoRunner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/algokit.html">Algokit</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">SophonInference</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>C++ Samples Using SAIL</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/demo/cpp_sail.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="c-samples-using-sail">
+<h1>C++ Samples Using SAIL<a class="headerlink" href="#c-samples-using-sail" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="id1">
+<h2>图像分类<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><strong>简介</strong></p>
+<p>该例程分别将三个分类模型编译为 bmodel，
+然后分别加载这三个 bmodel，驱动 TPU 推理。
+三个模型分别为：mobilenetv1(caffe)、resnet50(caffe)、mobilenetv1(tensorflow)。</p>
+<p>源文件位于：samples/cpp_sail/img_cls</p>
+<p>参数配置见：saples/cpp_sail/config/cls_imagenet.ini</p>
+<p><strong>程序运行</strong></p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型生成 bmodel</span>
+<span class="c1"># mobilenetv1 (caffe)</span>
+python3 tools/download_and_convert.py mobilenetv1
+<span class="c1"># resnet50 (caffe)</span>
+python3 tools/download_and_convert.py resnet50
+<span class="c1"># mobilenetv1 (tensorflow)</span>
+python3 tools/download_and_convert.py mobilenetv1_tf
+
+<span class="c1"># 驱动 TPU 推理</span>
+build/bin/img_cls
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id2">
+<h2>目标检测<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p><strong>简介</strong></p>
+<p>该例程包含了三个程序，分别对图像和视频进行目标检测。</p>
+<p><strong>1). det_voc_image</strong></p>
+<p>该程序将 mobilenetv1_ssd (caffe) 部署于 TPU 上，并实现对单张图像的检测。</p>
+<p>源代码位于： samples/cpp_sail/det_voc_image</p>
+<p>参数配置见： samples/cpp_sail/config/det_voc_image.ini</p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 tools/download_and_convert.py mobilenetssd
+
+<span class="c1"># 驱动 TPU 推理</span>
+build/bin/det_voc_image
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>2). det_voc_video</strong></p>
+<p>该程序将 mobilenetv1_ssd (caffe) 部署于 TPU 上，
+实现了驱动 VPU 对本地视频解码并对每帧图像进行检测。</p>
+<p>源代码位于： samples/cpp_sail/det_voc_video</p>
+<p>参数配置见： samples/cpp_sail/config/det_voc_video.ini</p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 tools/download_and_convert.py mobilenetssd
+
+<span class="c1"># 驱动 VPU 解码并驱动 TPU 推理</span>
+build/bin/det_voc_video
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>3). det_yolov3</strong></p>
+<p>该程序将 yolov3 (darknet_to_caffe 工具转换成的 caffe 模型) 部署于 TPU 上，
+并实现对单张图像的检测。</p>
+<p>源代码位于： samples/cpp_sail/det_yolov3</p>
+<p>参数配置见： samples/cpp_sail/config/det_yolov3.ini</p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py yolov3
+
+<span class="c1"># 驱动 TPU 推理</span>
+build/bin/det_yolov3
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="id3">
+<h2>人脸检测<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<p>该程序将 mtcnn (caffe) 模型部署于 TPU 上，
+并实现对单张图像的人脸检测。</p>
+<p>源代码位于： samples/cpp_sail/det_mtcnn</p>
+<p>参数配置见： samples/cpp_sail/config/det_mtcnn.ini</p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py mtcnn
+
+<span class="c1"># 驱动 TPU 推理</span>
+build/bin/det_mtcnn
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="python.html" class="btn btn-neutral float-right" title="Python Samples (Algokit)" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cpp.html" class="btn btn-neutral" title="C++ Samples Using BMNNSDK" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sophon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

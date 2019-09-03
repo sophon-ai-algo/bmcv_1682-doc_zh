@@ -1,0 +1,415 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Python Samples (Algokit) &mdash; SophonInference  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SophonInference  documentation" href="../index.html"/>
+        <link rel="next" title="SAIL" href="../module/sail.html"/>
+        <link rel="prev" title="C++ Samples Using SAIL" href="cpp_sail.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SophonInference
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/abstract.html">图解 Sophon Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/install.html">Sophon Inference 编译</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp.html">C++ Samples Using BMNNSDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_sail.html">C++ Samples Using SAIL</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Python Samples (Algokit)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#sail-python">直接使用 SAIL 的 python 接口</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#algokit">使用 Algokit 模块</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module/sail.html">SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/autosplit.html">AutoSplit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/autorunner.html">AutoRunner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/algokit.html">Algokit</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">SophonInference</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Python Samples (Algokit)</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/demo/python.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="python-samples-algokit">
+<h1>Python Samples (Algokit)<a class="headerlink" href="#python-samples-algokit" title="Permalink to this headline">¶</a></h1>
+<p>本章节中的程序都是基于 SAIL 的 python 接口的。
+如果您想查看 SAIL 提供了哪些 python 接口，
+可以参考源文件：src/bind.cpp。</p>
+<p>本章节提供了使用 Algokit 模块进行模型部署的程序，
+也提供了直接使用 SAIL python 接口的程序。</p>
+<div class="section" id="sail-python">
+<h2>直接使用 SAIL 的 python 接口<a class="headerlink" href="#sail-python" title="Permalink to this headline">¶</a></h2>
+<p><strong>yolov3</strong></p>
+<p>将 yolov3 (caffe) 部署到 TPU 上，
+对单张图像进行检测。</p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py yolov3
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_yolov3.py <span class="se">\</span>
+    --ir_path $HOME/.sophon/models/yolov3_ir/ <span class="se">\</span>
+    --input_path $HOME/.sophon/data/det_2.jpg
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="algokit">
+<h2>使用 Algokit 模块<a class="headerlink" href="#algokit" title="Permalink to this headline">¶</a></h2>
+<p><strong>图像分类</strong></p>
+<dl class="docutils">
+<dt>googlenet (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py googlenet
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type cls <span class="se">\</span>
+    --algo_name googlenet <span class="se">\</span>
+    --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+</pre></div>
+</div>
+</dd>
+<dt>resnet50 (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py resnet50
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type cls <span class="se">\</span>
+    --algo_name resnet50 <span class="se">\</span>
+    --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+</pre></div>
+</div>
+</dd>
+<dt>mobilenetv1 (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py mobilenetv1
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type cls <span class="se">\</span>
+    --algo_name mobilenetv1 <span class="se">\</span>
+    --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+</pre></div>
+</div>
+</dd>
+<dt>vgg16 (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py vgg16
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type cls <span class="se">\</span>
+    --algo_name vgg16 <span class="se">\</span>
+    --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+</pre></div>
+</div>
+</dd>
+<dt>mobilenetv1 (tensorflow)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py mobilenetv1_tf
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type cls <span class="se">\</span>
+    --algo_name mobilenetv1_tf <span class="se">\</span>
+    --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+</pre></div>
+</div>
+</dd>
+</dl>
+<p><strong>目标检测</strong></p>
+<dl class="docutils">
+<dt>yolov3 (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py yolov3
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type obj_det <span class="se">\</span>
+    --algo_name yolov3 <span class="se">\</span>
+    --input_path $HOME/.sophon/data/det_2.jpg
+</pre></div>
+</div>
+</dd>
+<dt>mobilenetyolov3 (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py mobilenetyolov3
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type obj_det <span class="se">\</span>
+    --algo_name mobilenetyolov3 <span class="se">\</span>
+    --input_path $HOME/.sophon/data/det_2.jpg
+</pre></div>
+</div>
+</dd>
+<dt>mobilenetssd (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py mobilenetssd
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type obj_det <span class="se">\</span>
+    --algo_name mobilenetssd <span class="se">\</span>
+    --input_path $HOME/.sophon/data/det_1.jpg
+</pre></div>
+</div>
+</dd>
+<dt>fasterrcnn_vgg16 (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py fasterrcnn_vgg
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type obj_det <span class="se">\</span>
+    --algo_name fasterrcnn_vgg <span class="se">\</span>
+    --input_path $HOME/.sophon/data/det_1.jpg
+</pre></div>
+</div>
+</dd>
+</dl>
+<p>fasterrcnn_resnet50 (tensorflow)</p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 该模型的部署用到了 AutoDeploy 模块，因此第一步只下载模型</span>
+<span class="c1"># 模型的自动切分、编译和运行均在第二步中执行</span>
+
+<span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py fasterrcnn_resnet50_tf
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type obj_det <span class="se">\</span>
+    --algo_name fasterrcnn_resnet50_tf <span class="se">\</span>
+    --input_path $HOME/.sophon/data/det_1.jpg
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>人脸检测</strong></p>
+<dl class="docutils">
+<dt>mtcnn (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py mtcnn
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type face_det <span class="se">\</span>
+    --algo_name mtcnn <span class="se">\</span>
+    --input_path $HOME/.sophon/data/face_1.jpg
+</pre></div>
+</div>
+</dd>
+<dt>ssh (caffe)</dt>
+<dd><div class="first last highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py ssh
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type face_det <span class="se">\</span>
+    --algo_name ssh <span class="se">\</span>
+    --input_path $HOME/.sophon/data/face_1.jpg
+</pre></div>
+</div>
+</dd>
+</dl>
+<p><strong>图像分割</strong></p>
+<p>deeplabv3 (tensorflow)</p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 该模型的部署用到了 AutoDeploy 模块，因此第一步只下载模型</span>
+<span class="c1"># 模型的自动切分、编译和运行均在第二步中执行</span>
+
+<span class="c1"># 下载并编译模型</span>
+python3 ./tools/download_and_convert.py deeplabv3_mobilenetv2_tf
+
+<span class="c1"># 驱动 TPU 推理</span>
+python3 ./samples/python/run_algokit.py <span class="se">\</span>
+    --algo_type seg <span class="se">\</span>
+    --algo_name deeplabv3_mobilenetv2_tf <span class="se">\</span>
+    --input_path $HOME/.sophon/data/seg_1.jpg
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../module/sail.html" class="btn btn-neutral float-right" title="SAIL" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="cpp_sail.html" class="btn btn-neutral" title="C++ Samples Using SAIL" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sophon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

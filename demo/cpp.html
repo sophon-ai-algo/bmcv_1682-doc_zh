@@ -1,0 +1,251 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>C++ Samples Using BMNNSDK &mdash; SophonInference  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SophonInference  documentation" href="../index.html"/>
+        <link rel="next" title="C++ Samples Using SAIL" href="cpp_sail.html"/>
+        <link rel="prev" title="前言" href="preparation.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SophonInference
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/abstract.html">图解 Sophon Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/install.html">Sophon Inference 编译</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="preparation.html">前言</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">C++ Samples Using BMNNSDK</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#vpu-decode">VPU decode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#run-inceptionv1">run_inceptionv1</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="cpp_sail.html">C++ Samples Using SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python Samples (Algokit)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module/sail.html">SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/autosplit.html">AutoSplit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/autorunner.html">AutoRunner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/algokit.html">Algokit</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">SophonInference</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>C++ Samples Using BMNNSDK</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/demo/cpp.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="c-samples-using-bmnnsdk">
+<h1>C++ Samples Using BMNNSDK<a class="headerlink" href="#c-samples-using-bmnnsdk" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="vpu-decode">
+<h2>VPU decode<a class="headerlink" href="#vpu-decode" title="Permalink to this headline">¶</a></h2>
+<p><strong>简介</strong></p>
+<p>这个示例程序实现了读取本地的视频文件，
+并驱动 Sophon 深度学习加速卡上的 VPU 硬件单元对该视频文件进行解码。</p>
+<p>程序源文件位于：“samples/cpp_bmnnsdk/vpu_decode/” 目录下。</p>
+<p><strong>程序运行</strong></p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># -v 待解码的本地视频文件</span>
+<span class="c1"># -t 需要开启的线程数量，每个线程独立解码一份视频文件的副本</span>
+<span class="c1"># -i 需要使用的SC3的序号</span>
+./build/bin/vpu_decode -v $HOME/.sophon/data/fenix5plus.mp4 -t <span class="m">1</span> -i 0
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="run-inceptionv1">
+<h2>run_inceptionv1<a class="headerlink" href="#run-inceptionv1" title="Permalink to this headline">¶</a></h2>
+<p><strong>简介</strong></p>
+<p>这个示例程序实现了将 inceptionv1 分类模型部署在 Sophon TPU 上。
+该 inceptionv1 来自 caffe 官方 model zoo。
+由于该程序是基于 BMNNSDK 提供的原生接口编写的，因此如果您对接口细节有疑问，
+请参考《NNToolChain用户文档》。</p>
+<p>程序源文件位于：“samples/cpp_bmnnsdk/run_inceptionv1” 目录下。</p>
+<p><strong>程序运行</strong></p>
+<blockquote>
+<div><div class="highlight-shell"><div class="highlight"><pre><span class="c1"># 下载并编译模型，生成 bmodel</span>
+python3 tools/download_and_convert.py googlenet
+
+<span class="c1"># 加载 bmodel，驱动 TPU 完成推理</span>
+./build/bin/run_inceptionv1 $HOME/.sophon/models/googlenet_ir $HOME/.sophon/data/cls_imgs/cls_1.jpg
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="cpp_sail.html" class="btn btn-neutral float-right" title="C++ Samples Using SAIL" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="preparation.html" class="btn btn-neutral" title="前言" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sophon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

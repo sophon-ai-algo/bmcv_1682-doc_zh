@@ -1,0 +1,24 @@
+前言
+====
+
+上一章中，我们对 BMNNSDK 与 Sophon Inference 的关系进行了梳理。
+在本章节，我们将带您运行 Sophon Inference 中的示例程序，即：
+
+**C++ Samples Using BMNNSDK**
+
+**C++ Samples Using SAIL**
+
+**Python Samples (Algokit)**
+
+在此之前：
+
+a). 请确保您已正确安装了 BMNNSDK 并且运行 “bm-smi” 后可以正常显示设备。
+如没有，请参考《Sophon产品用户手册》。
+
+b). 请确认您已经完成 “1.2 Sophon Inference 编译” 步骤。
+
+c). 请执行脚本下载所需的图像、视频文件。
+
+    .. code-block:: shell
+
+       python3 tools/download_and_convert.py test_data

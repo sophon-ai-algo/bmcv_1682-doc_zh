@@ -1,0 +1,275 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>AutoRunner &mdash; SophonInference  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SophonInference  documentation" href="../index.html"/>
+        <link rel="next" title="Algokit" href="algokit.html"/>
+        <link rel="prev" title="AutoSplit" href="autosplit.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SophonInference
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/abstract.html">图解 Sophon Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/install.html">Sophon Inference 编译</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo/preparation.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/cpp.html">C++ Samples Using BMNNSDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/cpp_sail.html">C++ Samples Using SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/python.html">Python Samples (Algokit)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sail.html">SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosplit.html">AutoSplit</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">AutoRunner</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#infer">infer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="algokit.html">Algokit</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">SophonInference</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>AutoRunner</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/module/autorunner.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="autorunner">
+<h1>AutoRunner<a class="headerlink" href="#autorunner" title="Permalink to this headline">¶</a></h1>
+<p>AutoRunner 提供的接口可对通过 AutoSplit 切分生成的子模型进行推理。
+AutoRunner 的源码位于 “module/auto_runner/” 目录下，目前支持 tensorflow/mxnet。
+我们在 “auto_runner.api” 中提供了一个函数：</p>
+<ul class="simple">
+<li>infer：</li>
+</ul>
+<p>解析指定目录下的 graph_infos.json 文件，根据给定输入，顺序加载子模型推理。</p>
+<p>通常情况下 AutoRunner 需要和 AutoSplit 一起使用，但用户也可以手动切分并编译模型，
+只要将其按照 graph_infos.json 中所规定的形式保存即可。</p>
+<div class="section" id="infer">
+<h2>infer<a class="headerlink" href="#infer" title="Permalink to this headline">¶</a></h2>
+<p>该函数可以根据切分后模型目录下的 graph_infos.json 文件中的信息，对切分后的模型进行推理。
+主要功能通过 Runner 类实现。
+<strong>Runner</strong> 在初始化时顺序加载 graph_infos.json 中 graphs 列表中的模型。如果 device 属性为 cpu，
+那么就调用原深度学习框架中的相关 api，根据 model_info 属性加载模型；
+如果 device 属性为 tpu，
+那么就调用 SAIL 的 engine 类，根据 context_dir 属性加载模型。</p>
+<p><strong>infer</strong> 函数说明如下，详见模块： <strong>auto_deploy.common.base_runner</strong> 和 <strong>auto_deploy.runner</strong> 。</p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="nd">@exception_wrapper</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="s2">&quot;Met an Error when infer model.&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">infer</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">input_tensors</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot; Run all the subgraphs as a pipeline.</span>
+
+<span class="sd">  Args:</span>
+<span class="sd">    folder: Directory path that contains splitted models and &#39;graph_infos.json&#39;.</span>
+
+<span class="sd">    Format of &#39;graph_infos.json&#39;:</span>
+<span class="sd">    {</span>
+<span class="sd">      &quot;graph_num&quot;: graph_numbmer,</span>
+<span class="sd">      &quot;platform&quot;: &quot;mxnet&quot;</span>
+<span class="sd">      &quot;layout&quot;: &quot;NCHW&quot;</span>
+<span class="sd">      &quot;dynamic&quot;: False</span>
+<span class="sd">      &quot;graphs&quot;: [</span>
+<span class="sd">        {</span>
+<span class="sd">          &quot;device&quot;: &quot;cpu&quot;,</span>
+<span class="sd">          &quot;inputs&quot;: list of input tensor names,</span>
+<span class="sd">          &quot;outputs&quot;: list of output tensor names,</span>
+<span class="sd">          &quot;model_info&quot;: {</span>
+<span class="sd">            &quot;json&quot;: json_file_path,</span>
+<span class="sd">            &quot;params&quot;: params_file_path</span>
+<span class="sd">          }</span>
+<span class="sd">        }</span>
+<span class="sd">      ]</span>
+<span class="sd">      &quot;tensors&quot;: [</span>
+<span class="sd">        {</span>
+<span class="sd">          &quot;name&quot;: name,</span>
+<span class="sd">          &quot;shape&quot;: list for shape,</span>
+<span class="sd">          &quot;attr&quot;: &quot;input&quot; or &quot;output&quot; or &quot;intermediate&quot;</span>
+<span class="sd">        }</span>
+<span class="sd">      ]</span>
+<span class="sd">    }</span>
+<span class="sd">    input_tensors: Input tensors. Format: {name: value}.</span>
+
+<span class="sd">  Returns:</span>
+<span class="sd">    Output tensors. Format: {name: value}.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="algokit.html" class="btn btn-neutral float-right" title="Algokit" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="autosplit.html" class="btn btn-neutral" title="AutoSplit" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sophon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

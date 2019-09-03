@@ -1,0 +1,285 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>图解 Sophon Inference &mdash; SophonInference  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SophonInference  documentation" href="../index.html"/>
+        <link rel="next" title="Sophon Inference 编译" href="install.html"/>
+        <link rel="prev" title="Sophon Inference 中文文档" href="../index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SophonInference
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">图解 Sophon Inference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#bmnnsdk">BMNNSDK</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">模型部署</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">Sophon Inference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Sophon Inference 编译</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo/preparation.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/cpp.html">C++ Samples Using BMNNSDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/cpp_sail.html">C++ Samples Using SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/python.html">Python Samples (Algokit)</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../module/sail.html">SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/autosplit.html">AutoSplit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/autorunner.html">AutoRunner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../module/algokit.html">Algokit</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">SophonInference</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>图解 Sophon Inference</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/quickstart/abstract.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sophon-inference">
+<h1>图解 Sophon Inference<a class="headerlink" href="#sophon-inference" title="Permalink to this headline">¶</a></h1>
+<p>Sophon Inference 是基于比特大陆原创深度学习开发工具包 BMNNSDK 开发的一套开源工具，
+旨在帮助您快速地将您的模型部署于 Sophon TPU 上。(<a class="reference external" href="https://sophon.ai">https://sophon.ai</a>)</p>
+<img alt="../_images/sophon_inference.png" src="../_images/sophon_inference.png" />
+<p>上图展示了 Sophon Inference 的整体结构以及它与 BMNNSDK 的依赖关系。
+下面我们对上述图文中提及的概念进行解释。</p>
+<div class="section" id="bmnnsdk">
+<h2>BMNNSDK<a class="headerlink" href="#bmnnsdk" title="Permalink to this headline">¶</a></h2>
+<p>BMNNSDK 是比特大陆原创的深度学习开发工具包，主要由BMDriver、BMCompiler、BMRuntime、BMDNN、BMCV、BMDecoder 等模块组成。
+其中：</p>
+<p><strong>BMDriver</strong>
+：是 Sophon TPU 的驱动程序，采用 “insmod” 的方式安装到您的操作系统内核中。</p>
+<p><strong>BMCompiler</strong>
+：是一组模型编译工具，它能将您训练好的深度学习模型编译成可被 Sophon TPU 加载并执行的指令，
+并将这些指令保存到一个后缀名为 “bmodel” 的文件中。</p>
+<p><strong>BMRuntime</strong>
+：提供的接口可以将 “bmodel” 文件加载到 Sophon TPU 上并驱动 TPU 芯片实现推理。</p>
+<p><strong>BMDNN</strong>
+：可以对 DNN 算法进行加速。</p>
+<p><strong>BMCV</strong>
+：可以驱动 TPU 进行图像处理。</p>
+<p><strong>BMDecoder</strong>
+：可以驱动 Sophon 深度学习加速卡上的 VPU 进行视频、图像解码。</p>
+<p>如果您还有关于BMNNSDK的任何疑问，请参考《NNToolChain用户手册》、《BMCV用户手册》。</p>
+</div>
+<div class="section" id="id1">
+<h2>模型部署<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p>模型部署包含模型离线编译与在线推理两个步骤。</p>
+<p><strong>a).离线编译</strong></p>
+<p>使用 BMCompiler 将深度学习模型编译为 TPU 指令并保存在 bmodel 文件中。</p>
+<p>BMCompiler 是一组模型编译工具，分别对应了不同的深度学习框架，
+目前的BMNNSDK中实现了4个编译工具用来支持4种深度学习框架。
+它们分别是 bmnetc(Caffe)、bmnett(Tensorflow)、bmnetp(Pytorch)、bmnetm(Mxnet)。</p>
+<p>模型编译不须插卡，不依赖 BMNNSDK 中除 BMCompiler 外的其它模块。</p>
+<p><strong>b).在线推理</strong></p>
+<p>使用 BMRuntime 中提供的接口加载 bmodel 文件至 TPU，
+并驱动 TPU 执行 bmodel 中的指令，完成推理。</p>
+<p>若要实现在线推理过程，您至少需要安装 Sophon TPU、BMDriver、BMruntime。</p>
+</div>
+<div class="section" id="id2">
+<h2>Sophon Inference<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>Sophon Inference 包括上图中的 SAIL、AutoDeploy、Python Samples(Algokit)、C++ Samples Using SAIL/BMNNSDK。
+我们提供了python/c++的接口与示例程序，您可以根据您的需要选择合适的调用方式。</p>
+<p>针对使用python的用户，SophonInference 提供了SAIL、AutoDeploy、Algokit三个模块：</p>
+<p><strong>SAIL</strong>
+：对 BMNNSDK 中的 BMRuntime、BMCV进行了封装，可用于
+a).驱动 TPU 对经过编译后的深度学习模型进行推理;
+b).使用Sophon TPU做图像、视频处理;
+模型转化以及图像、视频处理的详细介绍请参考《NNToolChain用户文档》与《BMCV用户文档》。</p>
+<p><strong>AutoSplit</strong>
+：一键式的模型切分与编译工具，主要面向无法完整部署到Sophon TPU上的模型，可自动化地：
+a).将原始模型切分为若干子模型;
+b).对其中可以部署到Sophon TPU上的子模型进行编译;
+目前支持tensorflow/mxnet。</p>
+<p><strong>AutoRunner</strong>
+：通常与 AutoSplit 一起使用，也可以单独使用。
+提供的接口可以实现切分后或编译后的子模型序列的推理。
+内部分别调用的特定深度学习框架的推理接口与 SAIL，分别实现 CPU 与 TPU 上的推理。
+目前支持 tensorflow/mxnet。</p>
+<p><strong>Algokit</strong>
+：对SAIL、AutoDeploy的功能进行了封装;
+以python代码实现了多个样例程序;
+作为应用代码编写的模板供用户参考。</p>
+<p>针对使用C++的用户，SophonInference 提供了 SAIL 以及:</p>
+<p><strong>C++ Samples Using BMNNSDK</strong>
+：调用 BMNNSDK 中的原生接口进行视频解码与模型推理的示例程序。</p>
+<p><strong>C++ Samples Using SAIL</strong>
+：调用 SAIL 提供的接口进行视频解码与模型推理的示例程序。</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="install.html" class="btn btn-neutral float-right" title="Sophon Inference 编译" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Sophon Inference 中文文档" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sophon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,385 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Algokit &mdash; SophonInference  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SophonInference  documentation" href="../index.html"/>
+        <link rel="prev" title="AutoRunner" href="autorunner.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SophonInference
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/abstract.html">图解 Sophon Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/install.html">Sophon Inference 编译</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo/preparation.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/cpp.html">C++ Samples Using BMNNSDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/cpp_sail.html">C++ Samples Using SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/python.html">Python Samples (Algokit)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="sail.html">SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autosplit.html">AutoSplit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autorunner.html">AutoRunner</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Algokit</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id1">应用介绍</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">应用添加</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">SophonInference</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Algokit</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/module/algokit.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="algokit">
+<h1>Algokit<a class="headerlink" href="#algokit" title="Permalink to this headline">¶</a></h1>
+<p><strong>Algokit</strong> 是 sophon-inference 面向应用部署提供的 python 模块，
+目前提供了图像分类、检测、分割等计算机视觉应用的示例。
+<strong>Algokit</strong> 依赖于 SAIL 和 Autodeploy 提供的模型部署相关的接口。</p>
+<div class="section" id="id1">
+<h2>应用介绍<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<p><strong>Algokit</strong> 中每个应用都是一个 algokit.engine.base_engine.BaseEngine 的子类的实例。
+应用的子类均实现在 algokit.algo_cv(计算机视觉)、algokit.algo_nlp(自然语言处理)、algokit.algo_speech(语音识别)
+这三个模块中。目前，我们已经提供了较为丰富的计算机视觉类应用。自然语言处理和语音识别的应用正在开发中。
+当前应用列表如下：</p>
+<ul class="simple">
+<li>caffe 的通用图像分类模型</li>
+</ul>
+<p>algokit.algo_cv.cls.general_classification.GeneralClassification</p>
+<ul class="simple">
+<li>mxnet 的通用图像分类模型</li>
+</ul>
+<p>algokit.algo_cv.cls.general_classification_mx.GeneralClassificationMX</p>
+<ul class="simple">
+<li>pytorch 的通用图像分类模型</li>
+</ul>
+<p>algokit.algo_cv.cls.general_classification_pt.GeneralClassificationPT</p>
+<ul class="simple">
+<li>tensorflow 的通用图像分类模型</li>
+</ul>
+<p>algokit.algo_cv.cls.general_classification_tf.GeneralClassificationTF</p>
+<ul class="simple">
+<li>caffe 的 fasterrcnn_vgg16 检测模型</li>
+</ul>
+<p>algokit.algo_cv.det.object_detection_fasterrcnn.ObjectDetectionFASTERRCNN</p>
+<ul class="simple">
+<li>tensorflow 的 fasterrcnn_resnet50 检测模型</li>
+</ul>
+<p>algokit.algo_cv.det.object_detection_fasterrcnn_resnet50_tf.ObjectDetectionFASTERRCNNRESNET50TF</p>
+<ul class="simple">
+<li>caffe 的 mobilenetssd 检测模型</li>
+</ul>
+<p>algokit.algo_cv.det.object_detection_mobilenetssd.ObjectDetectionMOBILENETSSD</p>
+<ul class="simple">
+<li>caffe 的 mobilenetyolov3 检测模型</li>
+</ul>
+<p>algokit.algo_cv.det.object_detection_mobilenetyolov3.ObjectDetectionMOBILENETYOLOV3</p>
+<ul class="simple">
+<li>caffe 的 yolov3 检测模型</li>
+</ul>
+<p>algokit.algo_cv.det.object_detection_yolov3.ObjectDetectionYOLOV3</p>
+<ul class="simple">
+<li>mxnet 的 yolov3 检测模型</li>
+</ul>
+<p>algokit.algo_cv.det.object_detection_yolov3_mx.ObjectDetectionYOLOV3MX</p>
+<ul class="simple">
+<li>caffe 的 mtcnn 检测模型</li>
+</ul>
+<p>algokit.algo_cv.det.face_detection_mtcnn.FaceDetectionMTCNN</p>
+<ul class="simple">
+<li>caffe 的 ssh 检测模型</li>
+</ul>
+<p>algokit.algo_cv.det.face_detection_ssh.FaceDetectionSSH</p>
+<ul class="simple">
+<li>tensorflow 的 mobilenetv2_deeplab_v3 分割模型</li>
+</ul>
+<p>algokit.algo_cv.seg.semantic_segmentation_deeplabv3_mobilenetv2_tf.SemanticSegmentationDEEPLABV3MOBILENETV2TF</p>
+<p>根据应用的类别与它们所依赖的模块，我们通过工厂类来统一创建应用，
+工厂类均实现在 algokit.algofactory 模块中，目前包括：</p>
+<ul class="simple">
+<li>通用图像分类应用的工厂类</li>
+</ul>
+<p>algokit.algofactory.generalclassification_factory.GeneralClassifier</p>
+<ul class="simple">
+<li>常用目标检测应用的工厂类</li>
+</ul>
+<p>algokit.algofactory.objectdetection_factory.ObjectDetector</p>
+<ul class="simple">
+<li>人脸检测应用的工厂类</li>
+</ul>
+<p>algokit.algofactory.facedetection_factory.FaceDetector</p>
+<ul class="simple">
+<li>使用了 auto_deploy 模块进行应用部署的工厂类</li>
+</ul>
+<p>algokit.algofactory.autodeploy_factory.ObjectDetector</p>
+<p>algokit.algofactory.autodeploy_factory.SemanticSegment</p>
+<p>对于 SAIL， <strong>Algokit</strong> 实现了自己的 engine 模块，其内部封装了 SAIL 的 engine 类，
+实现了 bmodel 的加载和运行。”generalclassification_factory“、”objectdetection_factory“、
+”facedetection_factory“ 均依赖于 engine 模块驱动 TPU 加载并运行 bmodel。
+对于 AutoDeploy， <strong>Algokit</strong> 封装了其 split、convert、infer 函数，封装后实现了 ”autodeploy_factory“ 模块。</p>
+</div>
+<div class="section" id="id2">
+<h2>应用添加<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<p>用户可以参照 algokit 已经的实现的应用添加自己的应用，
+本小节将介绍如何添加自己的应用到 algokit 中。</p>
+<p><strong>1). 实现一个 BaseEngine 的子类</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c1"># MobilenetSSD belong to CV detection algorithm</span>
+<span class="c1"># Create the new class in algokit/algo_cv/det</span>
+<span class="c1"># The parent class BaseEngine contains some basic data processing operations</span>
+<span class="k">class</span> <span class="nc">ObjectDetectionMOBILENETSSD</span><span class="p">(</span><span class="n">BaseEngine</span><span class="p">):</span>
+<span class="sd">&quot;&quot;&quot;Construct mobilenetssd detector</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">param1</span><span class="p">,</span> <span class="n">param2</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+  <span class="nb">super</span><span class="p">(</span><span class="n">ObjectDetectionMOBILENETSSD</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">__init__</span><span class="p">()</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">xxx</span> <span class="o">=</span> <span class="n">xxx</span> <span class="c1"># member variable init</span>
+  <span class="bp">self</span><span class="o">.</span><span class="n">net</span> <span class="o">=</span> <span class="n">Engine</span><span class="p">(</span><span class="n">model_description_dict</span><span class="p">,</span> <span class="n">chip_mode</span><span class="p">)</span> <span class="c1"># Construct TPU inference engine</span>
+<span class="k">def</span> <span class="nf">mobilenetssd_postprocess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  processing after inference e.g. detection output layer</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">pass</span>
+<span class="k">def</span> <span class="nf">mobilenetssd_preporcess</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  different frameworks and types of algorithm preprocess are different</span>
+<span class="sd">  or call the base operation of the parent class</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">pass</span>
+<span class="k">def</span> <span class="nf">xxx</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">...</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">  additional operation</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="k">pass</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>2). 在对应的工厂类中添加分支</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c1"># Add the new branch in algokit/algofactory/objectdetection_factory</span>
+<span class="c1"># 1. Add branch in create method</span>
+<span class="k">if</span> <span class="n">detection_model</span> <span class="ow">is</span> <span class="n">ObjDetModel</span><span class="o">.</span><span class="n">MOBILENETSSD</span><span class="p">:</span>
+<span class="kn">from</span> <span class="nn">..algo_cv.det.object_detection_mobilenetssd</span> <span class="kn">import</span> \
+  <span class="kn">import</span> <span class="nn">ObjectDetecitonMOBILENETSSD</span> <span class="kn">as</span> <span class="nn">Detector</span>
+
+<span class="c1"># 2. Add global DEFAULT_XXX_PARAM</span>
+<span class="n">DEFAULT_MOBILENETSSD_PARAM</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;detected_size&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span>
+    <span class="s1">&#39;threshold&#39;</span><span class="p">:</span> <span class="mf">0.25</span><span class="p">,</span>
+    <span class="s1">&#39;nms_threshold&#39;</span><span class="p">:</span> <span class="mf">0.45</span><span class="p">,</span>
+    <span class="s1">&#39;num_classes&#39;</span><span class="p">:</span> <span class="mi">21</span><span class="p">,</span>
+    <span class="s1">&#39;priorbox_num&#39;</span><span class="p">:</span> <span class="mi">1917</span>
+<span class="p">}</span>
+<span class="c1"># 3. Add param loader branch in load_param method</span>
+<span class="k">if</span> <span class="n">default_param</span> <span class="ow">is</span> <span class="n">ObjDetModel</span><span class="o">.</span><span class="n">MOBILENETSSD</span><span class="p">:</span>
+  <span class="n">default_param</span> <span class="o">=</span> <span class="n">DEFAULT_MOBILENETSSD_PARAM</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>3). 在 algokit 中注册对应的应用类型</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c1"># Add the new algorithm type in algokit/kitconfig</span>
+<span class="k">class</span> <span class="nc">ObjDetModel</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+  <span class="sd">&quot;&quot;&quot;The object detection algorithm model</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="o">...</span>
+  <span class="o">...</span>
+  <span class="n">MOBILENETSSD</span> <span class="o">=</span> <span class="s1">&#39;mobilenetssd&#39;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>4). 为新应用添加配置文件</strong></p>
+<blockquote>
+<div><div class="highlight-python"><div class="highlight"><pre><span class="c1"># Add the new model description config file in algokit/engine/engineconfig</span>
+<span class="c1"># Create new json file: bm1682_mobilenetssd.json</span>
+<span class="p">{</span>
+  <span class="s2">&quot;arch&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;context_path&quot;</span><span class="p">:</span> <span class="s2">&quot;mobilenetssd_ir/compilation.bmodel&quot;</span><span class="p">,</span> <span class="c1"># bmodel path suffix，base path: ${HOME}/.sophon/models</span>
+    <span class="s2">&quot;is_dynamic&quot;</span><span class="p">:</span> <span class="n">false</span><span class="p">,</span> <span class="c1"># the inputs size of model is variable</span>
+    <span class="s2">&quot;tpus&quot;</span><span class="p">:</span> <span class="s2">&quot;0&quot;</span><span class="p">,</span> <span class="c1"># tpu id</span>
+    <span class="s2">&quot;input_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="c1"># the input names of model</span>
+    <span class="s2">&quot;output_names&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;mbox_conf_flatten&quot;</span><span class="p">,</span> <span class="s2">&quot;mbox_loc&quot;</span><span class="p">,</span> <span class="s2">&quot;mbox_priorbox&quot;</span><span class="p">],</span> <span class="c1"># the output names of model</span>
+    <span class="s2">&quot;input_shapes&quot;</span><span class="p">:</span> <span class="p">[[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">]]</span> <span class="c1"># the default input size of model</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="autorunner.html" class="btn btn-neutral" title="AutoRunner" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sophon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

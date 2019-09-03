@@ -1,0 +1,66 @@
+AutoRunner
+==========
+
+AutoRunner 提供的接口可对通过 AutoSplit 切分生成的子模型进行推理。
+AutoRunner 的源码位于 “module/auto_runner/” 目录下，目前支持 tensorflow/mxnet。
+我们在 “auto_runner.api” 中提供了一个函数：
+
+* infer：
+
+解析指定目录下的 graph_infos.json 文件，根据给定输入，顺序加载子模型推理。
+
+通常情况下 AutoRunner 需要和 AutoSplit 一起使用，但用户也可以手动切分并编译模型，
+只要将其按照 graph_infos.json 中所规定的形式保存即可。
+
+infer
+_____
+
+该函数可以根据切分后模型目录下的 graph_infos.json 文件中的信息，对切分后的模型进行推理。
+主要功能通过 Runner 类实现。
+**Runner** 在初始化时顺序加载 graph_infos.json 中 graphs 列表中的模型。如果 device 属性为 cpu，
+那么就调用原深度学习框架中的相关 api，根据 model_info 属性加载模型；
+如果 device 属性为 tpu，
+那么就调用 SAIL 的 engine 类，根据 context_dir 属性加载模型。
+
+**infer** 函数说明如下，详见模块： **auto_deploy.common.base_runner** 和 **auto_deploy.runner** 。
+
+    .. code-block:: python
+
+       @exception_wrapper(message="Met an Error when infer model.")
+       def infer(folder, input_tensors):
+         """ Run all the subgraphs as a pipeline.
+       
+         Args:
+           folder: Directory path that contains splitted models and 'graph_infos.json'.
+       
+           Format of 'graph_infos.json':
+           {
+             "graph_num": graph_numbmer,
+             "platform": "mxnet"
+             "layout": "NCHW"
+             "dynamic": False
+             "graphs": [
+               {
+                 "device": "cpu",
+                 "inputs": list of input tensor names,
+                 "outputs": list of output tensor names,
+                 "model_info": {
+                   "json": json_file_path,
+                   "params": params_file_path
+                 }
+               }
+             ]
+             "tensors": [
+               {
+                 "name": name,
+                 "shape": list for shape,
+                 "attr": "input" or "output" or "intermediate"
+               }
+             ]
+           }
+           input_tensors: Input tensors. Format: {name: value}.
+       
+         Returns:
+           Output tensors. Format: {name: value}.
+         """
+

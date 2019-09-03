@@ -1,0 +1,780 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>SAIL &mdash; SophonInference  documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="SophonInference  documentation" href="../index.html"/>
+        <link rel="next" title="AutoSplit" href="autosplit.html"/>
+        <link rel="prev" title="Python Samples (Algokit)" href="../demo/python.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> SophonInference
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/abstract.html">图解 Sophon Inference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quickstart/install.html">Sophon Inference 编译</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../demo/preparation.html">前言</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/cpp.html">C++ Samples Using BMNNSDK</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/cpp_sail.html">C++ Samples Using SAIL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../demo/python.html">Python Samples (Algokit)</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="">SAIL</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#engine">Engine</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#frame">Frame</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#videodecoder">VideoDecoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#bmcv">Bmcv</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="autosplit.html">AutoSplit</a></li>
+<li class="toctree-l1"><a class="reference internal" href="autorunner.html">AutoRunner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="algokit.html">Algokit</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">SophonInference</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>SAIL</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/module/sail.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="sail">
+<h1>SAIL<a class="headerlink" href="#sail" title="Permalink to this headline">¶</a></h1>
+<p>SAIL 是 Sophon Inference 中的支撑模块，
+AutoDeploy、Algokit 以及 Samples 中的大部分代码都建立在 SAIL 的基础上。</p>
+<p>SAIL 对 BMNNSDK 中的 BMRuntime、BMCV、BMDecoder 进行了封装，
+将 BMNNSDK 中原有的 “加载 bmodel 并驱动 TPU 推理”、
+“驱动 TPU 做图像处理”、“驱动 VPU 做图像和视频解码”
+等功能抽象成更为简单的 C++ 接口对外提供；
+并且支持使用 pybind11 再次封装，
+提供了最为简洁的 python 接口。</p>
+<p>目前，SAIL 模块中所有的类、枚举、函数都在 “sail” 名字空间下，
+本单元中的文档将深入介绍您可能用到的 SAIL 中的模块和类。
+核心的类包括：</p>
+<ul class="simple">
+<li>Engine：</li>
+</ul>
+<p>BMRuntime 的包装类，可以加载 bmodel 并驱动 TPU 进行推理。
+一个 Engine 示例可以加载一个任意的 bmodel，
+自动地管理输入张量与输出张量对应的内存。</p>
+<ul class="simple">
+<li>Frame：</li>
+</ul>
+<p>封装了 Ffmpeg 中 的AVFrame，该 Ffmpeg 库是 Bitmain 提供的，与 BMNNSDK 一起发布，
+用于驱动 Sophon 深度学习加速卡上的 VPU 进行视频解码。</p>
+<ul class="simple">
+<li>VideoDecoder：</li>
+</ul>
+<p>将驱动 VPU 进行视频解码的功能进行了封装。</p>
+<ul class="simple">
+<li>Bmcv：</li>
+</ul>
+<p>封装了一系列的图像处理函数，可以驱动 TPU 进行图像处理。</p>
+<p>除此之外，由于我们目前提供了较多计算机视觉领域的模型部署例程，
+因此我们还对常用分类、检测等模型的前处理和后处理也进行了封装。
+分别实现为 Preprocess、Postprocess 两个模块，
+使用方法可以参考第二章中介绍的相关示例程序。</p>
+<div class="section" id="engine">
+<h2>Engine<a class="headerlink" href="#engine" title="Permalink to this headline">¶</a></h2>
+<p><strong>1). Engine 构造函数</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Constructor using default input shapes.
+
+@param context_dir Context directory path generated by BMCompiler
+@param chip_name   Name of the hardware. Option: &quot;BM1682_PCIE&quot;,
+                   &quot;BM1682_SOC&quot;, &quot;BM1684_PCIE&quot;, &quot;BM1684_SOC&quot;
+@param tpus        Ids of TPUS to be used, split by comma. Eg.: &quot;0,1&quot; for
+                   TPU 0 and TPU 1, &quot;all&quot; for all available TPUs
+@param mode        Specify the input/output tensors are in system memory
+                   or device memory
+@param dynamic     True for dynamic models and false for static ones
+
+Engine(
+    const std::string&amp; context_dir,
+    const std::string&amp; chip_name,
+    const std::string&amp; tpus,
+    IOMode             mode,
+    bool               dynamic);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>2). get_graph_names</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get all graph names in the loaded context.
+
+@return All graph names
+
+std::vector&lt;std::string&gt; get_graph_names();
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>3). get_input_names</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get all input tensor names of the specified graph.
+
+@param graph_name The specified graph name
+@return All the input tensor names of the graph
+
+std::vector&lt;std::string&gt; get_input_names(const std::string&amp; graph_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>4). get_output_names</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get all output tensor names of the specified graph.
+
+@param graph_name The specified graph name
+@return All the output tensor names of the graph
+
+std::vector&lt;std::string&gt; get_output_names(const std::string&amp; graph_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>5). is_input_batch_size_equal</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Judge if batch size of all input tensors are equal.
+
+@param input_shapes All input tensor shapes
+@batch_size         Batch size to return
+
+@return True if batch size of all input tensors are equal
+
+bool is_input_batch_size_equal(
+    std::map&lt;std::string, std::vector&lt;int&gt;&gt;&amp; input_shapes,
+    int&amp;                                     batch_size);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>6). set_input_shape</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Set input tensor shapes when running dynamic models with
+       synchronous mode.
+
+The input tensor shapes may change between batches when running dynamic
+models. New input shapes should be set before inference. Note that this
+function is for synchronous mode.
+
+@param graph_name   The specified graph name
+@param input_shapes Specified shapes of all input tensors of the graph
+
+void set_input_shape(
+    const std::string&amp;                       graph_name,
+    std::map&lt;std::string, std::vector&lt;int&gt;&gt;&amp; input_shapes);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>7). get_bmrt</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get bmruntime pointers created by constructor.
+
+@return bmruntime pointers
+
+BmRuntime get_bmrt();
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>8). get_max_input_shapes</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get max shapes of input tensors in a graph.
+
+For static models, the max shape is the static shape and it should not be
+changed. While for dynamic models, the tensor shape should be smaller than
+or equal to the max shape.
+
+@param graph_name The specified graph name
+@param is_total   True for total specified tpus; False for a single one
+@return The max shape of the tensor
+
+std::map&lt;std::string, std::vector&lt;int&gt;&gt; get_max_input_shapes(
+    const std::string&amp; graph_name,
+    bool               is_total);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>9). get_input_shape</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the shape of an input tensor in a graph.
+
+@param graph_name  The specified graph name
+@param tensor_name The specified tensor name
+@return The shape of the tensor
+
+std::vector&lt;int&gt; get_input_shape(
+    const std::string&amp; graph_name,
+    const std::string&amp; tensor_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>10). get_output_shape</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the shape of an output tensor in a graph.
+
+@param graph_name  The specified graph name
+@param tensor_name The specified tensor name
+@return The shape of the tensor
+
+std::vector&lt;int&gt; get_output_shape(
+    const std::string&amp; graph_name,
+    const std::string&amp; tensor_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>11). get_input_tensor_sys</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the data pointer in the system memory of the input tensor.
+
+@param graph_name  The specified graph name
+@param tensor_name The specified tensor name
+@return The data pointer in the system memory of the input tensor
+
+Dtype* get_input_tensor_sys(
+    const std::string&amp; graph_name,
+    const std::string&amp; tensor_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>12). get_output_tensor_sys</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the data pointer in the system memory of the output tensor.
+
+@param graph_name  The specified graph name
+@param tensor_name The specified tensor name
+@return The data pointer in the system memory of the output tensor
+@note It&#39;s static models or synchronous mode
+
+Dtype* get_output_tensor_sys(
+    const std::string&amp; graph_name,
+    const std::string&amp; tensor_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>13). get_input_tensor_dev_mem</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the device memory of the input tensor with synchronous mode.
+
+@param graph_name  The specified graph name
+@param tensor_name The specified tensor name
+@return The device memory of the input tensor
+
+bm_device_mem_t* get_input_tensor_dev_mem(
+    const std::string&amp; graph_name,
+    const std::string&amp; tensor_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>14). get_input_tensor_dev</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the input tensor which only owns the device memory with
+       synchronous mode.
+
+@param graph_name  The specified graph name
+@param tensor_name The specified tensor name
+@return A Tensor instance which only owns the device memory of the tensor.
+
+Tensor&lt;Dtype&gt; get_input_tensor_dev(
+    const std::string&amp; graph_name,
+    const std::string&amp; tensor_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>15). get_output_tensor_dev_mem</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the device memory of the output tensor with synchronous mode.
+
+@param graph_name  The specified graph name
+@param tensor_name The specified tensor name
+@return The device memory of the output tensor
+
+bm_device_mem_t* get_output_tensor_dev_mem(
+    const std::string&amp; graph_name,
+    const std::string&amp; tensor_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>16). get_output_tensor_dev</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the output tensor which only owns the device memory with
+       synchronous mode.
+
+@param graph_name  The specified graph name
+@param tensor_name The specified tensor name
+@return A Tensor instance which only owns the device memory of the tensor.
+
+Tensor&lt;Dtype&gt; get_output_tensor_dev(
+    const std::string&amp; graph_name,
+    const std::string&amp; tensor_name);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>17). process</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Do inference with synchronous mode.
+
+@param graph_name The specified graph name
+
+void process(const std::string&amp; graph_name);
+
+
+
+@brief Do inference with synchronous mode with provided input tensors
+
+@param graph_name The specified graph name
+@input_shapes     Shapes of all input tensors
+@input_tensors    Data pointers of all input tensors in system meory
+
+void process(
+    const std::string&amp;                       graph_name,
+    std::map&lt;std::string, std::vector&lt;int&gt;&gt;&amp; input_shapes,
+    std::map&lt;std::string, Dtype*&gt;&amp;           input_tensors);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>18). reset_input_tensors</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Reset data pointers of input tensors in system memory.
+
+@param graph_name    The specified graph name
+@param input_shapes  Shapes of all input tensors
+@param input_tensors Data pointers in system meory for all input tensors
+
+void reset_input_tensors(
+    const std::string&amp;                       graph_name,
+    std::map&lt;std::string, std::vector&lt;int&gt;&gt;&amp; input_shapes,
+    std::map&lt;std::string, Dtype*&gt;&amp;           input_tensors);
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="frame">
+<h2>Frame<a class="headerlink" href="#frame" title="Permalink to this headline">¶</a></h2>
+<p>Frame 是对比特大陆定制版的 FFMPEG 中的 AVFrame 数据结构的封装，用于支撑 VPU 硬件解码功能。
+Frame 类提供的接口如下。</p>
+<p><strong>1). Frame 构造函数</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Constructor
+
+Frame();
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>2). get</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get the pointer of AVFrame instance.
+
+@return Pointer of AVFrame instance.
+
+AVFrame* get();
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>3). get_height</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get height of the frame.
+
+@return Height of the frame
+
+int get_height();
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>4). get_width</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get width of the frame.
+
+@return Width of the frame
+
+int get_width();
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="videodecoder">
+<h2>VideoDecoder<a class="headerlink" href="#videodecoder" title="Permalink to this headline">¶</a></h2>
+<p><strong>1). VideoDecoder 构造函数</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Constructor.
+
+@param file_path Path to the video file.
+
+explicit VideoDecoder(const std::string&amp; file_path);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>2). is_opened</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Judge if the video file is opened successfully.
+
+@return True if the video file is opened successfully
+
+bool is_opened();
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>3). get_frame_shape</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get frame shape in the video.
+
+@return Frame shape in the video, [1, C, H, W]
+
+std::vector&lt;int&gt; get_frame_shape();
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>4). read</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Read a frame from the video.
+
+@param frame Reference of frame to be read to
+@return 0 for success and 1 for failure
+
+int read(Frame&amp; frame);
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="bmcv">
+<h2>Bmcv<a class="headerlink" href="#bmcv" title="Permalink to this headline">¶</a></h2>
+<p><strong>1). Bmcv 构造函数</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Constructor.
+
+explicit Bmcv(BmRuntime bmrt) :
+  handle_(static_cast&lt;bm_handle_t&gt;(bmrt_get_bm_handle(bmrt.get_ptr()))),
+  p_bmrt_(bmrt.get_ptr()) {}
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>2). get_bmrt</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get pointer to bmruntime.
+
+@return Pointer to bmruntime
+
+void* get_bmrt();
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>3). get_bgr_from_frame</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Get BGR data from a frame read by VPU.
+
+@param frame  A Frame instance read by VPU
+@param tensor A tensor stores the BGR data
+
+void get_bgr_from_frame(Frame&amp; frame, Tensor&lt;float&gt;&amp; tensor);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>4). resize</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Resize an image with interpolation of INTER_NEAREST.
+
+@param input  Input image
+@param output Output image
+@return 0 for success and other for failure
+
+int resize(
+  Tensor&lt;float&gt;&amp;             input,
+  Tensor&lt;float&gt;&amp;             output);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>5). crop</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Crop an image.
+
+@param input  Input image
+@param output Output image
+@param top    Start point most top from original image
+@param left   Start point most left from original image
+@return 0 for success and other for failure
+
+int crop(
+  Tensor&lt;float&gt;&amp;             input,
+  Tensor&lt;float&gt;&amp;             output,
+  int                        top,
+  int                        left);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>6). yuv2bgr</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Convert an image from YUV to BGR.
+
+@param input_y  Data of channel Y
+@param input_uv Data of Channel UV
+@param ouput    Data of BGR
+@return 0 for success and other for failure
+
+int yuv2bgr(
+  Tensor&lt;float&gt;&amp;             input_y,
+  Tensor&lt;float&gt;&amp;             input_uv,
+  Tensor&lt;float&gt;&amp;             output);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>7). crop_resize_norm</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Resize an image, crop it and do normalizition.
+
+@param input       Input image
+@param output      Output image
+@param top         Start point most top from original image
+@param left        Start point most left from original image
+@param crop_height Crop image height
+@param crop_width  Crop image width
+@param scale_b     Scale factor for channel b
+@param bias_b      Bias for channel b
+@param scale_g     Scale factor for channel g
+@param bias_g      Bias for channel g
+@param scale_r     Scale factor for channel r
+@param bias_r      Bias for channel r
+@return 0 for success and other for failure
+
+int crop_resize_norm(
+  Tensor&lt;float&gt;&amp;             input,
+  Tensor&lt;float&gt;&amp;             output,
+  int                        top,
+  int                        left,
+  int                        crop_height,
+  int                        crop_width,
+  float                      scale_b,
+  float                      bias_b,
+  float                      scale_g,
+  float                      bias_g,
+  float                      scale_r,
+  float                      bias_r);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>8). resize_norm</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Resize an image and do normalizition.
+
+@param input   Input image
+@param output  Output image
+@param scale_b Scale factor for channel b
+@param bias_b  Bias for channel b
+@param scale_g Scale factor for channel g
+@param bias_g  Bias for channel g
+@param scale_r Scale factor for channel r
+@param bias_r  Bias for channel r
+@return 0 for success and other for failure
+
+int resize_norm(
+  Tensor&lt;float&gt;&amp;             input,
+  Tensor&lt;float&gt;&amp;             output,
+  float                      scale_b,
+  float                      bias_b,
+  float                      scale_g,
+  float                      bias_g,
+  float                      scale_r,
+  float                      bias_r);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>9). transpose</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Transpose an image.
+
+@param input  Input image
+@param output Output image
+@return 0 for success and other for failure
+
+int transpose(
+  Tensor&lt;float&gt;&amp;             input,
+  Tensor&lt;float&gt;&amp;             output);
+</pre></div>
+</div>
+</div></blockquote>
+<p><strong>10). bgrsplit</strong></p>
+<blockquote>
+<div><div class="highlight-c++"><div class="highlight"><pre>@brief Convert packed BGR image data to BGR planar data format..
+
+@param input  Input image
+@param output Output image
+@return 0 for success and other for failure
+
+int bgrsplit(
+  Tensor&lt;float&gt;&amp;             input,
+  Tensor&lt;float&gt;&amp;             output);
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="autosplit.html" class="btn btn-neutral float-right" title="AutoSplit" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../demo/python.html" class="btn btn-neutral" title="Python Samples (Algokit)" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Sophon.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

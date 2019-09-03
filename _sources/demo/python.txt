@@ -1,0 +1,203 @@
+Python Samples (Algokit)
+========================
+
+本章节中的程序都是基于 SAIL 的 python 接口的。
+如果您想查看 SAIL 提供了哪些 python 接口，
+可以参考源文件：src/bind.cpp。
+
+本章节提供了使用 Algokit 模块进行模型部署的程序，
+也提供了直接使用 SAIL python 接口的程序。
+
+直接使用 SAIL 的 python 接口
+____________________________
+
+**yolov3**
+
+将 yolov3 (caffe) 部署到 TPU 上，
+对单张图像进行检测。
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py yolov3
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_yolov3.py \
+           --ir_path $HOME/.sophon/models/yolov3_ir/ \
+           --input_path $HOME/.sophon/data/det_2.jpg
+
+
+使用 Algokit 模块
+_________________
+
+**图像分类**
+
+googlenet (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py googlenet
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type cls \
+           --algo_name googlenet \
+           --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+
+resnet50 (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py resnet50
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type cls \
+           --algo_name resnet50 \
+           --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+
+mobilenetv1 (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py mobilenetv1
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type cls \
+           --algo_name mobilenetv1 \
+           --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+
+vgg16 (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py vgg16
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type cls \
+           --algo_name vgg16 \
+           --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+
+mobilenetv1 (tensorflow)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py mobilenetv1_tf
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type cls \
+           --algo_name mobilenetv1_tf \
+           --input_path $HOME/.sophon/data/cls_imgs/cls_1.jpg
+
+**目标检测**
+
+yolov3 (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py yolov3
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type obj_det \
+           --algo_name yolov3 \
+           --input_path $HOME/.sophon/data/det_2.jpg
+
+mobilenetyolov3 (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py mobilenetyolov3
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type obj_det \
+           --algo_name mobilenetyolov3 \
+           --input_path $HOME/.sophon/data/det_2.jpg
+
+mobilenetssd (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py mobilenetssd
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type obj_det \
+           --algo_name mobilenetssd \
+           --input_path $HOME/.sophon/data/det_1.jpg
+
+fasterrcnn_vgg16 (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py fasterrcnn_vgg
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type obj_det \
+           --algo_name fasterrcnn_vgg \
+           --input_path $HOME/.sophon/data/det_1.jpg
+
+fasterrcnn_resnet50 (tensorflow)
+
+    .. code-block:: shell
+
+       # 该模型的部署用到了 AutoDeploy 模块，因此第一步只下载模型
+       # 模型的自动切分、编译和运行均在第二步中执行
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py fasterrcnn_resnet50_tf
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type obj_det \
+           --algo_name fasterrcnn_resnet50_tf \
+           --input_path $HOME/.sophon/data/det_1.jpg
+
+**人脸检测**
+
+mtcnn (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py mtcnn
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type face_det \
+           --algo_name mtcnn \
+           --input_path $HOME/.sophon/data/face_1.jpg
+
+ssh (caffe)
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py ssh
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type face_det \
+           --algo_name ssh \
+           --input_path $HOME/.sophon/data/face_1.jpg
+
+**图像分割**
+
+deeplabv3 (tensorflow)
+
+    .. code-block:: shell
+
+       # 该模型的部署用到了 AutoDeploy 模块，因此第一步只下载模型
+       # 模型的自动切分、编译和运行均在第二步中执行
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py deeplabv3_mobilenetv2_tf
+
+       # 驱动 TPU 推理
+       python3 ./samples/python/run_algokit.py \
+           --algo_type seg \
+           --algo_name deeplabv3_mobilenetv2_tf \
+           --input_path $HOME/.sophon/data/seg_1.jpg
+

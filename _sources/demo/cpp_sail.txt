@@ -1,0 +1,109 @@
+C++ Samples Using SAIL
+======================
+
+图像分类
+________
+
+**简介**
+
+该例程分别将三个分类模型编译为 bmodel，
+然后分别加载这三个 bmodel，驱动 TPU 推理。
+三个模型分别为：mobilenetv1(caffe)、resnet50(caffe)、mobilenetv1(tensorflow)。
+
+源文件位于：samples/cpp_sail/img_cls
+
+参数配置见：saples/cpp_sail/config/cls_imagenet.ini
+
+**程序运行**
+
+    .. code-block:: shell
+
+       # 下载并编译模型生成 bmodel
+       # mobilenetv1 (caffe)
+       python3 tools/download_and_convert.py mobilenetv1
+       # resnet50 (caffe)
+       python3 tools/download_and_convert.py resnet50
+       # mobilenetv1 (tensorflow)
+       python3 tools/download_and_convert.py mobilenetv1_tf
+
+       # 驱动 TPU 推理
+       build/bin/img_cls
+
+
+目标检测
+________
+
+**简介**
+
+该例程包含了三个程序，分别对图像和视频进行目标检测。
+
+**1). det_voc_image**
+
+该程序将 mobilenetv1_ssd (caffe) 部署于 TPU 上，并实现对单张图像的检测。
+
+源代码位于： samples/cpp_sail/det_voc_image
+
+参数配置见： samples/cpp_sail/config/det_voc_image.ini
+
+    .. code-block:: shell
+    
+       # 下载并编译模型
+       python3 tools/download_and_convert.py mobilenetssd
+
+       # 驱动 TPU 推理
+       build/bin/det_voc_image
+
+**2). det_voc_video**
+
+该程序将 mobilenetv1_ssd (caffe) 部署于 TPU 上，
+实现了驱动 VPU 对本地视频解码并对每帧图像进行检测。
+
+源代码位于： samples/cpp_sail/det_voc_video
+
+参数配置见： samples/cpp_sail/config/det_voc_video.ini
+
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 tools/download_and_convert.py mobilenetssd
+
+       # 驱动 VPU 解码并驱动 TPU 推理
+       build/bin/det_voc_video
+
+**3). det_yolov3**
+
+该程序将 yolov3 (darknet_to_caffe 工具转换成的 caffe 模型) 部署于 TPU 上，
+并实现对单张图像的检测。
+
+源代码位于： samples/cpp_sail/det_yolov3
+
+参数配置见： samples/cpp_sail/config/det_yolov3.ini
+
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py yolov3
+
+       # 驱动 TPU 推理
+       build/bin/det_yolov3
+
+人脸检测
+________
+
+该程序将 mtcnn (caffe) 模型部署于 TPU 上，
+并实现对单张图像的人脸检测。
+
+源代码位于： samples/cpp_sail/det_mtcnn
+
+参数配置见： samples/cpp_sail/config/det_mtcnn.ini
+
+    .. code-block:: shell
+
+       # 下载并编译模型
+       python3 ./tools/download_and_convert.py mtcnn
+
+       # 驱动 TPU 推理
+       build/bin/det_mtcnn
+
+
+

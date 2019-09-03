@@ -1,0 +1,183 @@
+Algokit
+=======
+
+**Algokit** 是 sophon-inference 面向应用部署提供的 python 模块，
+目前提供了图像分类、检测、分割等计算机视觉应用的示例。
+**Algokit** 依赖于 SAIL 和 Autodeploy 提供的模型部署相关的接口。
+
+应用介绍
+________
+
+**Algokit** 中每个应用都是一个 algokit.engine.base_engine.BaseEngine 的子类的实例。
+应用的子类均实现在 algokit.algo_cv(计算机视觉)、algokit.algo_nlp(自然语言处理)、algokit.algo_speech(语音识别)
+这三个模块中。目前，我们已经提供了较为丰富的计算机视觉类应用。自然语言处理和语音识别的应用正在开发中。
+当前应用列表如下：
+
+* caffe 的通用图像分类模型
+
+algokit.algo_cv.cls.general_classification.GeneralClassification
+
+* mxnet 的通用图像分类模型
+
+algokit.algo_cv.cls.general_classification_mx.GeneralClassificationMX
+
+* pytorch 的通用图像分类模型
+
+algokit.algo_cv.cls.general_classification_pt.GeneralClassificationPT
+
+* tensorflow 的通用图像分类模型
+
+algokit.algo_cv.cls.general_classification_tf.GeneralClassificationTF
+
+* caffe 的 fasterrcnn_vgg16 检测模型
+
+algokit.algo_cv.det.object_detection_fasterrcnn.ObjectDetectionFASTERRCNN
+
+* tensorflow 的 fasterrcnn_resnet50 检测模型
+
+algokit.algo_cv.det.object_detection_fasterrcnn_resnet50_tf.ObjectDetectionFASTERRCNNRESNET50TF
+
+* caffe 的 mobilenetssd 检测模型
+
+algokit.algo_cv.det.object_detection_mobilenetssd.ObjectDetectionMOBILENETSSD
+
+* caffe 的 mobilenetyolov3 检测模型
+
+algokit.algo_cv.det.object_detection_mobilenetyolov3.ObjectDetectionMOBILENETYOLOV3
+
+* caffe 的 yolov3 检测模型
+
+algokit.algo_cv.det.object_detection_yolov3.ObjectDetectionYOLOV3
+
+* mxnet 的 yolov3 检测模型
+
+algokit.algo_cv.det.object_detection_yolov3_mx.ObjectDetectionYOLOV3MX
+
+* caffe 的 mtcnn 检测模型
+
+algokit.algo_cv.det.face_detection_mtcnn.FaceDetectionMTCNN
+
+* caffe 的 ssh 检测模型
+
+algokit.algo_cv.det.face_detection_ssh.FaceDetectionSSH
+
+* tensorflow 的 mobilenetv2_deeplab_v3 分割模型
+
+algokit.algo_cv.seg.semantic_segmentation_deeplabv3_mobilenetv2_tf.SemanticSegmentationDEEPLABV3MOBILENETV2TF
+
+
+根据应用的类别与它们所依赖的模块，我们通过工厂类来统一创建应用，
+工厂类均实现在 algokit.algofactory 模块中，目前包括：
+
+* 通用图像分类应用的工厂类
+
+algokit.algofactory.generalclassification_factory.GeneralClassifier
+
+* 常用目标检测应用的工厂类
+
+algokit.algofactory.objectdetection_factory.ObjectDetector
+
+* 人脸检测应用的工厂类
+
+algokit.algofactory.facedetection_factory.FaceDetector
+
+* 使用了 auto_deploy 模块进行应用部署的工厂类
+
+algokit.algofactory.autodeploy_factory.ObjectDetector
+
+algokit.algofactory.autodeploy_factory.SemanticSegment
+
+
+对于 SAIL， **Algokit** 实现了自己的 engine 模块，其内部封装了 SAIL 的 engine 类，
+实现了 bmodel 的加载和运行。”generalclassification_factory“、”objectdetection_factory“、
+”facedetection_factory“ 均依赖于 engine 模块驱动 TPU 加载并运行 bmodel。
+对于 AutoDeploy， **Algokit** 封装了其 split、convert、infer 函数，封装后实现了 ”autodeploy_factory“ 模块。
+
+应用添加
+________
+
+用户可以参照 algokit 已经的实现的应用添加自己的应用，
+本小节将介绍如何添加自己的应用到 algokit 中。
+
+**1). 实现一个 BaseEngine 的子类**
+
+    .. code-block:: python
+
+       # MobilenetSSD belong to CV detection algorithm
+       # Create the new class in algokit/algo_cv/det
+       # The parent class BaseEngine contains some basic data processing operations
+       class ObjectDetectionMOBILENETSSD(BaseEngine):
+       """Construct mobilenetssd detector
+       """
+       def __init__(self, param1, param2, ...):
+         super(ObjectDetectionMOBILENETSSD, self).__init__()
+         self.xxx = xxx # member variable init
+         self.net = Engine(model_description_dict, chip_mode) # Construct TPU inference engine
+       def mobilenetssd_postprocess(self, ...):
+         """
+         processing after inference e.g. detection output layer
+         """
+         pass
+       def mobilenetssd_preporcess(self, ...):
+         """
+         different frameworks and types of algorithm preprocess are different
+         or call the base operation of the parent class
+         """
+         pass
+       def xxx(self, ...):
+         """
+         additional operation
+         """
+         pass
+
+**2). 在对应的工厂类中添加分支**
+
+    .. code-block:: python
+       
+       # Add the new branch in algokit/algofactory/objectdetection_factory
+       # 1. Add branch in create method
+       if detection_model is ObjDetModel.MOBILENETSSD:
+       from ..algo_cv.det.object_detection_mobilenetssd import \
+         import ObjectDetecitonMOBILENETSSD as Detector
+
+       # 2. Add global DEFAULT_XXX_PARAM
+       DEFAULT_MOBILENETSSD_PARAM = {
+           'detected_size': (300, 300),
+           'threshold': 0.25,
+           'nms_threshold': 0.45,
+           'num_classes': 21,
+           'priorbox_num': 1917
+       }
+       # 3. Add param loader branch in load_param method
+       if default_param is ObjDetModel.MOBILENETSSD:
+         default_param = DEFAULT_MOBILENETSSD_PARAM
+
+**3). 在 algokit 中注册对应的应用类型**
+
+    .. code-block:: python
+
+       # Add the new algorithm type in algokit/kitconfig
+       class ObjDetModel(Enum):
+         """The object detection algorithm model
+         """
+         ...
+         ...
+         MOBILENETSSD = 'mobilenetssd'
+
+**4). 为新应用添加配置文件**
+
+    .. code-block:: python
+
+       # Add the new model description config file in algokit/engine/engineconfig
+       # Create new json file: bm1682_mobilenetssd.json
+       {
+         "arch": {
+           "context_path": "mobilenetssd_ir/compilation.bmodel", # bmodel path suffix，base path: ${HOME}/.sophon/models
+           "is_dynamic": false, # the inputs size of model is variable
+           "tpus": "0", # tpu id
+           "input_names": ["data"], # the input names of model
+           "output_names": ["mbox_conf_flatten", "mbox_loc", "mbox_priorbox"], # the output names of model
+           "input_shapes": [[1, 3, 300, 300]] # the default input size of model
+         }
+       }    
+
